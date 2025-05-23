@@ -1,15 +1,14 @@
-
 {
-  "name": "telegram-login-backend",
+  "name": "telegram-backend",
   "version": "1.0.0",
+  "description": "Telegram phone login backend using GramJS",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
-    "telegram": "^1.11.0"
+    "express": "^4.18.2",
+    "telegram": "^1.13.0"
   }
 }
